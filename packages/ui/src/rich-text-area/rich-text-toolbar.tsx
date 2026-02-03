@@ -55,7 +55,7 @@ export function RichTextToolbar({
           icon={TextBold}
           label="Bold"
           isActive={editorState?.isBold}
-          onClick={() => editor?.chain().focus().toggleBold?.().run()}
+          onClick={() => (editor?.chain().focus() as any)?.toggleBold?.().run()}
         />
       )}
       {features?.includes("italic") && (
@@ -63,7 +63,7 @@ export function RichTextToolbar({
           icon={TextItalic}
           label="Italic"
           isActive={editorState?.isItalic}
-          onClick={() => editor?.chain().focus().toggleItalic?.().run()}
+          onClick={() => (editor?.chain().focus() as any)?.toggleItalic?.().run()}
         />
       )}
       {features?.includes("strike") && (
@@ -71,7 +71,7 @@ export function RichTextToolbar({
           icon={TextStrike}
           label="Strikethrough"
           isActive={editorState?.isStrike}
-          onClick={() => editor?.chain().focus().toggleStrike?.().run()}
+          onClick={() => (editor?.chain().focus() as any)?.toggleStrike?.().run()}
         />
       )}
       {features?.includes("headings") && (
