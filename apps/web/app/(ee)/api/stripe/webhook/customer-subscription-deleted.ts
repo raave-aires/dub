@@ -70,8 +70,8 @@ export async function customerSubscriptionDeleted(event: Stripe.Event) {
   if (!workspace) {
     console.log(
       "Workspace with Stripe ID *`" +
-        stripeId +
-        "`* not found in Stripe webhook `customer.subscription.deleted` callback",
+      stripeId +
+      "`* not found in Stripe webhook `customer.subscription.deleted` callback",
     );
     return NextResponse.json({ received: true });
   }
@@ -123,13 +123,13 @@ export async function customerSubscriptionDeleted(event: Stripe.Event) {
       },
     }),
 
-    // disable dub.link premium default domain for the workspace
+    // disable rl2me domain for the workspace
     prisma.defaultDomains.update({
       where: {
         projectId: workspace.id,
       },
       data: {
-        dublink: false,
+        rl2me: false,
       },
     }),
 
@@ -180,9 +180,9 @@ export async function customerSubscriptionDeleted(event: Stripe.Event) {
 
     // Don't send feedback if the user was blacklisted / banned
     !isBlacklistedCancellation &&
-      sendCancellationFeedback({
-        owners: workspaceUsers,
-      }),
+    sendCancellationFeedback({
+      owners: workspaceUsers,
+    }),
 
     // Disable the webhooks
     prisma.webhook.updateMany({

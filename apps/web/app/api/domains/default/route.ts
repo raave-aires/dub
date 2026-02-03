@@ -1,8 +1,7 @@
-import { DubApiError } from "@/lib/api/errors";
 import { withWorkspace } from "@/lib/auth";
 import { getDefaultDomainsQuerySchema } from "@/lib/zod/schemas/domains";
 import { prisma } from "@dub/prisma";
-import { DUB_DOMAINS_ARRAY } from "@dub/utils";
+import { SHORT_DOMAIN } from "@dub/utils";
 import { NextResponse } from "next/server";
 import * as z from "zod/v4";
 
@@ -16,30 +15,17 @@ export const GET = withWorkspace(
         projectId: workspace.id,
       },
       select: {
-        dubsh: true,
-        dublink: true,
-        chatgpt: true,
-        sptifi: true,
-        gitnew: true,
-        callink: true,
-        amznid: true,
-        ggllink: true,
-        figpage: true,
+        rl2me: true,
       },
     });
 
     let defaultDomains: string[] = [];
 
-    if (data) {
-      defaultDomains = Object.keys(data)
-        .filter((key) => data[key])
-        .map(
-          (domain) =>
-            DUB_DOMAINS_ARRAY.find((d) => d.replace(".", "") === domain)!,
-        )
-        .filter((domain) =>
-          search ? domain?.toLowerCase().includes(search.toLowerCase()) : true,
-        );
+    if (data?.rl2me) {
+      defaultDomains = [SHORT_DOMAIN];
+      if (search && !SHORT_DOMAIN.toLowerCase().includes(search.toLowerCase())) {
+        defaultDomains = [];
+      }
     }
 
     return NextResponse.json(defaultDomains);
@@ -50,7 +36,7 @@ export const GET = withWorkspace(
 );
 
 const updateDefaultDomainsSchema = z.object({
-  defaultDomains: z.array(z.enum(DUB_DOMAINS_ARRAY as [string, ...string[]])),
+  defaultDomains: z.array(z.string()),
 });
 
 // PATCH /api/domains/default - edit default domains
@@ -60,28 +46,12 @@ export const PATCH = withWorkspace(
       await req.json(),
     );
 
-    if (workspace.plan === "free" && defaultDomains.includes("dub.link")) {
-      throw new DubApiError({
-        code: "forbidden",
-        message:
-          "You can only use dub.link on a Pro plan and above. Upgrade to Pro to use this domain.",
-      });
-    }
-
     const response = await prisma.defaultDomains.update({
       where: {
         projectId: workspace.id,
       },
       data: {
-        dubsh: defaultDomains.includes("dub.sh"),
-        dublink: defaultDomains.includes("dub.link"),
-        chatgpt: defaultDomains.includes("chatg.pt"),
-        sptifi: defaultDomains.includes("spti.fi"),
-        gitnew: defaultDomains.includes("git.new"),
-        callink: defaultDomains.includes("cal.link"),
-        amznid: defaultDomains.includes("amzn.id"),
-        ggllink: defaultDomains.includes("ggl.link"),
-        figpage: defaultDomains.includes("fig.page"),
+        rl2me: defaultDomains.includes(SHORT_DOMAIN),
       },
     });
 
