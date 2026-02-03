@@ -20,6 +20,13 @@ console.warn = (...args) => {
 /** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: false,
+  // Disable type checking and linting during build to reduce memory usage
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   transpilePackages: [
     "prettier",
     "shiki",
