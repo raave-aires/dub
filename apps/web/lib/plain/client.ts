@@ -1,8 +1,13 @@
 import { PlainClient } from "@team-plain/typescript-sdk";
 
-export const plain = new PlainClient({
-  apiKey: process.env.PLAIN_API_KEY as string,
-});
+const apiKey = process.env.PLAIN_API_KEY;
+
+export const plain =
+  apiKey && apiKey.length > 0 && apiKey !== "undefined"
+    ? new PlainClient({
+      apiKey,
+    })
+    : null;
 
 export type PlainUser = {
   id: string;

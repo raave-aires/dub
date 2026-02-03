@@ -3,6 +3,9 @@ import { plain, PlainUser } from "./client";
 export const upsertPlainCustomer = async (
   user: PlainUser & { email: string },
 ) => {
+  if (!plain) {
+    return { data: null };
+  }
   const fullName = user.name || user.email;
   const shortName = user.name || user.email.split("@")[0];
 
