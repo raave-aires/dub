@@ -32,5 +32,19 @@
   "resolutions": {
     "chrono-node": "2.7.5"
   },
+  "pnpm": {
+    "overrides": {
+      "@tiptap/core": "3.19.0",
+      "@tiptap/pm": "3.19.0",
+      "@tiptap/react": "3.19.0",
+      "@tiptap/starter-kit": "3.19.0",
+      "@tiptap/extension-file-handler": "3.19.0",
+      "@tiptap/extension-image": "3.19.0",
+      "@tiptap/extension-link": "3.19.0",
+      "@tiptap/extension-mention": "3.19.0",
+      "@tiptap/extensions": "3.19.0",
+      "@tiptap/markdown": "3.19.0"
+    }
+  },
   "packageManager": "pnpm@8.6.10"
 }
