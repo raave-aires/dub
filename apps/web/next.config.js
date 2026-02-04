@@ -41,6 +41,7 @@ module.exports = {
     ],
   },
   experimental: {
+    webpackMemoryOptimizations: true, // Reduce memory usage during builds
     optimizePackageImports: [
       "@dub/email",
       "@dub/ui",
@@ -51,7 +52,12 @@ module.exports = {
       bodySizeLimit: "2mb",
     },
   },
-  webpack: (config, { webpack, isServer }) => {
+  webpack: (config, { webpack, isServer, dev }) => {
+    // Disable webpack cache for production to reduce memory usage
+    if (config.cache && !dev) {
+      config.cache = Object.freeze({ type: 'memory' });
+    }
+
     if (isServer) {
       config.plugins.push(
         // mute errors for unused typeorm deps
